@@ -10,9 +10,6 @@ grayscale = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
 kernel = np.ones((5,5),np.uint8)
 dilated = cv2.dilate(grayscale, kernel, iterations = 2)
 
-cv2.imshow('caca', dilated)
-cv2.waitKey()
-
 contours, hierarchy = cv2.findContours(
     dilated, 
     cv2.RETR_TREE, 
@@ -27,6 +24,19 @@ cv2.drawContours(
     thickness = cv2.FILLED
 )
 
+morphSize = 28
 
+element = cv2.getStructuringElement(
+    cv2.MORPH_ELLIPSE,
+    (2 * morphSize + 1, 2 * morphSize + 1), 
+    (morphSize, morphSize)
+)
+
+
+output = cv2.morphologyEx(
+    output,
+    cv2.MORPH_TOPHAT,
+    element
+)
 cv2.imshow('A', output)
 cv2.waitKey()
