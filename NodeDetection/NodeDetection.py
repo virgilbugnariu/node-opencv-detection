@@ -9,6 +9,14 @@ class NodeDetection:
     def __init__(self):
         log.debug('NodeDetection class initialized')
 
+    def setImage(self, image):
+        if image is not None:
+            log.debug('Converting image to grayscale')
+            self.image = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+        else:
+            log.debug('No image passed')
+        
+    # Deprecated
     def loadImage(self):
         log.debug('Loading image')
         originalImage = cv2.imread(
