@@ -31,6 +31,7 @@ def main(args):
     osc = OSCCommunication()
 
     def handleGetNodesCoords(channelName, value):
+        logging.debug('Running node coords handler')
         if value > 0:
             nodeDetection.loadImage()
             mainNode, secondaryNodes = nodeDetection.runPipeline()
@@ -48,11 +49,14 @@ def main(args):
                     'size': node.size
                 })
 
+            # TODO: Send the original image size for proper remaping
             message = {
                 "mainNode": mainNodeData,
                 "secondaryNodes": secondaryNodesData
             }
 
+            logging.debug('Sending nodes coords')
+            logging.debug(json.dumps(message))
             osc.client.send_message('/nodesCoords', json.dumps(message))
 
     osc.dispatcher.map('/getNodesCoords', handleGetNodesCoords)
