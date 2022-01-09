@@ -2,6 +2,7 @@ import logging as log
 import json
 import os
 import cv2
+import time
 
 from InputDevice import InputDevice
 from InputDevice import InputDevices
@@ -40,13 +41,15 @@ class App:
             calibration = Calibration()
             
             self.osc.client.send_message('/showCalibrationPattern', 1)
-            
+            time.sleep(1)
+
             calibrationFrame = self.inputDevice.device.getFrame(showCalibrationPattern = True)
             rectangle = calibration.getBoundingRectangle(calibrationFrame)
 
             self.parameters.set('boundingRect', rectangle)
             self.parameters.savePreset()
             
+            time.sleep(1)
             self.osc.client.send_message('/showCalibrationPattern', 0)
     
     def handleGetNodesCoords(self, channelName, value):
