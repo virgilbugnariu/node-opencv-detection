@@ -40,10 +40,10 @@ class Calibration:
             return
         
         mainCorners = (
-            corners[0][0],
-            corners[COLUMNS - 1][0],
-            corners[-1][0],
-            corners[-COLUMNS][0]
+            corners[0][0].tolist(),
+            corners[COLUMNS - 1][0].tolist(),
+            corners[-1][0].tolist(),
+            corners[-COLUMNS][0].tolist()
         )
 
         return mainCorners

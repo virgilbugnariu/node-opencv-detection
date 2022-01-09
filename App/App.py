@@ -8,7 +8,7 @@ from InputDevice import InputDevices
 from NodeDetection import NodeDetection
 from OSCCommunication import OSCCommunication
 from Calibration import Calibration
-
+from Parameters import Parameters
 class App:
     def __init__(self):
         filePath = os.path.join(
@@ -23,8 +23,11 @@ class App:
         self.currentFrame = self.inputDevice.device.getFrame()
         self.nodeDetection = NodeDetection()
         self.osc = OSCCommunication()
+        self.parameters = Parameters()
         
         self.setCallbacks()
+
+        # This must be the last instruction all the time
         self.osc.init()
 
     def setCallbacks(self):
@@ -34,12 +37,16 @@ class App:
     def handleGetCalibrationRequest(self, channelName, value):
         if value > 0:
             log.debug('Received calibration request')
-            self.osc.client.send_message('/showCalibrationPattern', 1)
-            calibrationFrame = self.inputDevice.device.getFrame(showCalibrationPattern = True)
             calibration = Calibration()
+            
+            self.osc.client.send_message('/showCalibrationPattern', 1)
+            
+            calibrationFrame = self.inputDevice.device.getFrame(showCalibrationPattern = True)
             rectangle = calibration.getBoundingRectangle(calibrationFrame)
 
-            log.debug(rectangle)
+            self.parameters.set('boundingRect', rectangle)
+            self.parameters.savePreset()
+            
             self.osc.client.send_message('/showCalibrationPattern', 0)
     
     def handleGetNodesCoords(self, channelName, value):
