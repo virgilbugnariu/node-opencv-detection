@@ -8,8 +8,6 @@ from .ImagePipeline import ImagePipeline
 class NodeDetection:
     def __init__(self):
         log.debug('NodeDetection class initialized')
-        self.loadImage()
-        nodePositions = self.runPipeline()
 
     def loadImage(self):
         log.debug('Loading image')
