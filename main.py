@@ -1,13 +1,10 @@
 import logging
 import getopt
 import sys
-import json
-from NodeDetection import NodeDetection
-from OSCCommunication import OSCCommunication
 
-# Init program
+from App import App
+
 def main(args):
-
     # Defaults
     LOG_LEVEL = 'INFO'
 
@@ -23,45 +20,7 @@ def main(args):
             LOG_LEVEL = arg
 
     logging.basicConfig(level=LOG_LEVEL)
-
-    logging.info('Initialize NodeDetection')
-    nodeDetection = NodeDetection()
-
-    logging.info('Initialize OSC communication')
-    osc = OSCCommunication()
-
-    def handleGetNodesCoords(channelName, value):
-        logging.debug('Running node coords handler')
-        if value > 0:
-            nodeDetection.loadImage()
-            mainNode, secondaryNodes = nodeDetection.runPipeline()
-
-            mainNodeData = {
-                'position': mainNode.pt,
-                'size': mainNode.size
-            }
-
-            secondaryNodesData = []
-
-            for node in secondaryNodes:
-                secondaryNodesData.append({
-                    'position': node.pt,
-                    'size': node.size
-                })
-
-            # TODO: Send the original image size for proper remaping
-            message = {
-                "mainNode": mainNodeData,
-                "secondaryNodes": secondaryNodesData
-            }
-
-            logging.debug('Sending nodes coords')
-            logging.debug(json.dumps(message))
-            osc.client.send_message('/nodesCoords', json.dumps(message))
-
-    osc.dispatcher.map('/getNodesCoords', handleGetNodesCoords)
-
-    osc.init()
+    return App()
 
 if __name__ == '__main__':
     main(sys.argv[1:])
