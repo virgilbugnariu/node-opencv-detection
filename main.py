@@ -8,7 +8,7 @@ from NodeDetection import NodeDetection
 def main(args):
 
     # Defaults
-    LOG_LEVEL = 'INFO'
+    LOG_LEVEL = 'INF'
 
     # Get logging level argument
     try:
