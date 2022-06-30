@@ -7,7 +7,7 @@ from App import App
 def main(args):
     # Defaults
     LOG_LEVEL = 'INFO'
-
+    print("test")
     # Get logging level argument
     try:
         opts, args = getopt.getopt(args, 'l', ['log='])
